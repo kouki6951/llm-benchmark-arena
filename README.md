@@ -18,7 +18,7 @@
 # 1. 依存インストール
 npm install
 
-# 2. DB作成（スキーマ反映）。DBパスは .env（コミット済み）から読まれます
+# 2. DB作成（スキーマ反映）。DBパスは schema.prisma に固定（環境変数不要）
 npx prisma db push
 
 # 3. 初期データ投入（モデル14件＋評価テーマ15件）
@@ -35,13 +35,10 @@ npm run dev
 
 ## 環境変数
 
-| ファイル | 用途 | Git |
-| -------- | ---- | --- |
-| `.env` | `DATABASE_URL`（DBパス・非機密） | コミット対象 |
-| `.env.local` | APIキー（`OPENAI_API_KEY` 等）・`MAX_CONCURRENCY` | **コミット禁止**（`.gitignore` で除外） |
+APIキー等は `.env.local` に設定します（**コミット禁止**。`.gitignore` で除外）。DBの保存先は `prisma/schema.prisma` に固定されているため、環境変数（`.env`）は不要です。
 
 ```env
-# .env.local
+# .env.local（.env.local.example をコピーして作成）
 OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
 GOOGLE_API_KEY=

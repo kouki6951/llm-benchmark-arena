@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  // ローカル固定パス。環境変数不要（.env を持たない）。
+  url      = "file:../data/benchmark.db"
 }
 
 model BenchmarkCase {

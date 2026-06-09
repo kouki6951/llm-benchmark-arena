@@ -20,8 +20,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files — APIキー(.env.local)は絶対にコミットしない
-# .env は DBパス等の非機密のみ（Prisma CLI が参照するためコミット対象）
+# local env files — 機密情報を含みうるため除外（テンプレート .env.local.example のみ追跡）
+.env
 .env.local
 .env*.local
 
