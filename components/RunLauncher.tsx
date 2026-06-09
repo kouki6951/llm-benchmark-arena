@@ -19,7 +19,8 @@ export function RunLauncher({
   models: ModelOption[];
 }) {
   const router = useRouter();
-  const [selected, setSelected] = useState<number[]>(models.map((m) => m.id));
+  // デフォルトは全モデル未選択
+  const [selected, setSelected] = useState<number[]>([]);
   const [judgeId, setJudgeId] = useState<number | null>(models[0]?.id ?? null);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
