@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BenchmarkCase {
+  id             Int      @id @default(autoincrement())
+  title          String
+  category       String
+  prompt         String
+  rubricJson     String?  @map("rubric_json")
+  expectedOutput String?  @map("expected_output")
+  memo           String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  runs           BenchmarkRun[]
+
+  @@map("benchmark_cases")
+}
+
+model BenchmarkModel {
+  id              Int      @id @default(autoincrement())
+  provider        String
+  modelName       String   @map("model_name")
+  displayName     String   @map("display_name")
+  apiBaseUrl      String?  @map("api_base_url")
+  inputCostPer1k  Float?   @map("input_cost_per_1k")
+  outputCostPer1k Float?   @map("output_cost_per_1k")
+  enabled         Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  results         BenchmarkRunResult[]
+
+  @@map("benchmark_models")
+}
+
+model BenchmarkRun {
+  id         Int       @id @default(autoincrement())
+  caseId     Int       @map("case_id")
+  title      String
+  status     String
+  startedAt  DateTime? @map("started_at")
+  finishedAt DateTime? @map("finished_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  case       BenchmarkCase @relation(fields: [caseId], references: [id])
+  results    BenchmarkRunResult[]
+
+  @@index([caseId])
+  @@index([status])
+  @@map("benchmark_runs")
+}
+
+model BenchmarkRunResult {
+  id            Int      @id @default(autoincrement())
+  runId         Int      @map("run_id")
+  modelId       Int      @map("model_id")
+  response      String?
+  latencyMs     Int?     @map("latency_ms")
+  inputTokens   Int?     @map("input_tokens")
+  outputTokens  Int?     @map("output_tokens")
+  estimatedCost Float?   @map("estimated_cost")
+  status        String
+  errorMessage  String?  @map("error_message")
+  createdAt     DateTime @default(now()) @map("created_at")
+  run           BenchmarkRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  model         BenchmarkModel @relation(fields: [modelId], references: [id])
+  scores        BenchmarkScore[]
+
+  @@index([runId])
+  @@index([modelId])
+  @@map("benchmark_run_results")
+}
+
+model BenchmarkScore {
+  id               Int      @id @default(autoincrement())
+  resultId         Int      @map("result_id")
+  judgeProvider    String   @map("judge_provider")
+  judgeModel       String   @map("judge_model")
+  accuracy         Int?
+  coverage         Int?
+  practicality     Int?
+  readability      Int?
+  evidence         Int?
+  totalScore       Int?     @map("total_score")
+  judgeComment     String?  @map("judge_comment")
+  rawJudgeResponse String?  @map("raw_judge_response")
+  createdAt        DateTime @default(now()) @map("created_at")
+  result           BenchmarkRunResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@index([resultId])
+  @@map("benchmark_scores")
+}

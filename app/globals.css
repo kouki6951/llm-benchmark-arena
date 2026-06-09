@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #05070a;
+  --bg-panel: #12161c;
+  --bg-panel-alt: #1a1f27;
+  --grid-line: #1e2630;
+  --border: #2a333d;
+  --accent: #39ff14;
+  --accent-dim: #1f8a0e;
+  --accent-glow: rgba(57, 255, 20, 0.35);
+  --warn: #ff8a00;
+  --danger: #ff3b30;
+  --info: #2fb8ff;
+  --text-primary: #e6f0e8;
+  --text-muted: #7c8a93;
+}
+
+html,
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* ===== グリッド背景（戦術指令室） ===== */
+.grid-bg {
+  background-color: var(--bg-base);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.grid-bg-radial {
+  position: relative;
+}
+.grid-bg-radial::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    transparent 0%,
+    rgba(5, 7, 10, 0.55) 75%,
+    rgba(5, 7, 10, 0.9) 100%
+  );
+}
+
+/* ===== 斜めカットパネル ===== */
+.clip-hud {
+  clip-path: polygon(
+    14px 0,
+    100% 0,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    0 100%,
+    0 14px
+  );
+}
+
+.clip-hud-sm {
+  clip-path: polygon(
+    8px 0,
+    100% 0,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0 100%,
+    0 8px
+  );
+}
+
+/* ===== 六角形 ===== */
+.clip-hex {
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+
+/* ===== グロー ===== */
+.glow {
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+.glow-box {
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ===== スキャンライン ===== */
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+.scanline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(57, 255, 20, 0.06),
+    transparent
+  );
+  animation: scan 3s linear infinite;
+  pointer-events: none;
+}
+
+/* ===== スクロールバー ===== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border: 2px solid var(--bg-base);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dim);
+}
+
+/* HUDラベル共通 */
+.hud-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
